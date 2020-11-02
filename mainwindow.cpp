@@ -15,17 +15,35 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setActiveList(QListWidget *listWidget) {
+    m_activeList = listWidget;
+    ++m_activeInd %= 2;
+}
+
+void MainWindow::setPassiveList(QListWidget *listWidget) {
+    m_passiveList = listWidget;
+    ++m_passiveInd %= 2;
+}
+
+
+
 void MainWindow::init() {
     ui->menuFile->addAction(ui->actionRename);
+    ui->menuFile->addAction(ui->actionCopy);
+    ui->menuFile->addAction(ui->actionMove);
 
-    generateFilePanel(ui->listWidget, "/home/papka");
+    generateFilePanel(ui->listWidget1, "/home/papka");
+    generateFilePanel(ui->listWidget2, "/");
 
     // enter and double click
-    connect(ui->listWidget, &QListWidget::itemActivated, this, &MainWindow::processItem);
+    connect(ui->listWidget1, &QListWidget::itemActivated, this, &MainWindow::processItem);
+    connect(ui->listWidget2, &QListWidget::itemActivated, this, &MainWindow::processItem);
 
 }
 
 void MainWindow::processItem(QListWidgetItem *item) {
+
+    auto files = m_filesVector[0];
 
     auto itemIndex = item->listWidget()->row(item) + 1;
 
@@ -39,8 +57,9 @@ void MainWindow::generateFilePanel(QListWidget *listPanel, QString pathString) {
 
     listPanel->clear();
 
-    currDir = QDir(pathString);
-    files = currDir.entryInfoList();
+    m_currDirVector[0] = QDir(pathString);
+    m_filesVector[0] = m_currDirVector[0].entryInfoList();
+    auto files = m_filesVector[0];
 
     for (int i = 1; i < files.size(); i++) {
         QListWidgetItem *newItem = new QListWidgetItem;

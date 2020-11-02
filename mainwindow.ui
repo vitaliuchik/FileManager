@@ -17,8 +17,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>0</y>
+      <x>720</x>
+      <y>510</y>
       <width>67</width>
       <height>17</height>
      </rect>
@@ -27,13 +27,23 @@
      <string>Empty</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QListWidget" name="listWidget1">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>70</y>
+      <y>20</y>
       <width>371</width>
-      <height>241</height>
+      <height>471</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget2">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>20</y>
+      <width>381</width>
+      <height>471</height>
      </rect>
     </property>
    </widget>
@@ -78,6 +88,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionRename"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionMove"/>
   </widget>
   <action name="actionRename">
    <property name="text">
@@ -85,6 +97,22 @@
    </property>
    <property name="shortcut">
     <string>F2</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionMove">
+   <property name="text">
+    <string>Move</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
    </property>
   </action>
  </widget>
