@@ -1,12 +1,20 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QDebug>
+#include <QTextStream>
+#include <QString>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    m_activeList = ui->listWidget1;
+    m_passiveList = ui->listWidget2;
+
     init();
 }
 
@@ -15,45 +23,113 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setActiveList(QListWidget *listWidget) {
-    m_activeList = listWidget;
-    ++m_activeInd %= 2;
-}
-
-void MainWindow::setPassiveList(QListWidget *listWidget) {
-    m_passiveList = listWidget;
-    ++m_passiveInd %= 2;
-}
-
-
 
 void MainWindow::init() {
-    ui->menuFile->addAction(ui->actionRename);
+    ui->menuFile->addAction(ui->actionRemove);
     ui->menuFile->addAction(ui->actionCopy);
     ui->menuFile->addAction(ui->actionMove);
 
-    generateFilePanel(ui->listWidget1, "/home/papka");
-    generateFilePanel(ui->listWidget2, "/");
+    generateFilePanel1(m_activeList, "/home/papka");
+    generateFilePanel2(m_passiveList, "/home/papka/Downloads");
 
     // enter and double click
-    connect(ui->listWidget1, &QListWidget::itemActivated, this, &MainWindow::processItem);
-    connect(ui->listWidget2, &QListWidget::itemActivated, this, &MainWindow::processItem);
+    connect(m_activeList, &QListWidget::itemActivated, this, &MainWindow::processItem1);
+    connect(m_passiveList, &QListWidget::itemActivated, this, &MainWindow::processItem2);
+
+    connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copyItem);
+    connect(ui->actionMove, &QAction::triggered, this, &MainWindow::moveItem);
+    connect(ui->actionRemove, &QAction::triggered, this, &MainWindow::removeItem);
 
 }
 
-void MainWindow::processItem(QListWidgetItem *item) {
+void MainWindow::processItem1(QListWidgetItem *item) {
 
     auto files = m_filesVector[0];
 
     auto itemIndex = item->listWidget()->row(item) + 1;
 
     if (files[itemIndex].isDir()) {
-        generateFilePanel(item->listWidget(), files[itemIndex].absoluteFilePath());
+        generateFilePanel1(item->listWidget(), files[itemIndex].absoluteFilePath());
     }
+}
+
+void MainWindow::processItem2(QListWidgetItem *item) {
+
+    auto files = m_filesVector[1];
+
+    auto itemIndex = item->listWidget()->row(item) + 1;
+
+    if (files[itemIndex].isDir()) {
+        generateFilePanel2(item->listWidget(), files[itemIndex].absoluteFilePath());
+    }
+}
+
+void MainWindow::copyItem() {
+
+    QListWidgetItem *item = m_activeList->currentItem();
+
+    auto files = m_filesVector[0];
+
+    auto itemIndex = item->listWidget()->row(item) + 1;
+
+    QString newPath = m_currDirVector[1].path() + "/" + files[itemIndex].fileName();
+    if (QFile::exists(newPath))
+    {
+        QFile::remove(newPath);
+    }
+
+    QFile::copy(files[itemIndex].absoluteFilePath(), newPath);
+
+//    QTextStream out(stdout);
+//    out << files[itemIndex].absoluteFilePath() << endl;
+//    out << newPath << endl;
+
+
+    generateFilePanel2(m_passiveList, m_currDirVector[1].path());
 
 }
 
-void MainWindow::generateFilePanel(QListWidget *listPanel, QString pathString) {
+void MainWindow::moveItem() {
+
+    QListWidgetItem *item = m_activeList->currentItem();
+
+    auto files = m_filesVector[0];
+
+    auto itemIndex = item->listWidget()->row(item) + 1;
+
+    QString newPath = m_currDirVector[1].path() + "/" + files[itemIndex].fileName();
+    if (QFile::exists(newPath))
+    {
+        QFile::remove(newPath);
+    }
+
+    QFile::copy(files[itemIndex].absoluteFilePath(), newPath);
+    if (QFile::exists(files[itemIndex].absoluteFilePath()))
+    {
+        QFile::remove(files[itemIndex].absoluteFilePath());
+    }
+
+    generateFilePanel1(m_activeList, m_currDirVector[0].path());
+    generateFilePanel2(m_passiveList, m_currDirVector[1].path());
+
+}
+
+void MainWindow::removeItem() {
+
+    QListWidgetItem *item = m_activeList->currentItem();
+
+    auto files = m_filesVector[0];
+    auto itemIndex = item->listWidget()->row(item) + 1;
+    if (QFile::exists(files[itemIndex].absoluteFilePath()))
+    {
+        QFile::remove(files[itemIndex].absoluteFilePath());
+    }
+
+    generateFilePanel1(m_activeList, m_currDirVector[0].path());
+    generateFilePanel2(m_passiveList, m_currDirVector[1].path());
+}
+
+void MainWindow::generateFilePanel1(QListWidget *listPanel, QString pathString) {
 
     listPanel->clear();
 
@@ -75,4 +151,34 @@ void MainWindow::generateFilePanel(QListWidget *listPanel, QString pathString) {
     }
     listPanel->item(0)->setSelected(true);
 
+    pathString.replace(QString("../"), QString(""));
+    ui->label1->setText(pathString);
 }
+
+void MainWindow::generateFilePanel2(QListWidget *listPanel, QString pathString) {
+
+    listPanel->clear();
+
+    m_currDirVector[1] = QDir(pathString);
+    m_filesVector[1] = m_currDirVector[1].entryInfoList();
+    auto files = m_filesVector[1];
+
+    for (int i = 1; i < files.size(); i++) {
+        QListWidgetItem *newItem = new QListWidgetItem;
+
+        QString temp = "";
+        QString text = files[i].fileName() + "\t   " + (files[i].isDir() ? "dir " : "file") + "   ";
+        text += files[i].lastModified().toString("yyyy.MM.dd") + "   ";
+        temp.setNum(files[i].size());
+        text += (files[i].isDir() ? "" : temp);
+
+        newItem->setText(text);
+        listPanel->insertItem(i, newItem);
+    }
+    listPanel->item(0)->setSelected(true);
+
+    pathString.replace(QString("../"), QString(""));
+    ui->label2->setText(pathString);
+}
+
+

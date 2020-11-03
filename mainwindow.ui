@@ -14,12 +14,12 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="label1">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>510</y>
-      <width>67</width>
+      <x>20</x>
+      <y>0</y>
+      <width>371</width>
       <height>17</height>
      </rect>
     </property>
@@ -45,6 +45,19 @@
       <width>381</width>
       <height>471</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label2">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>0</y>
+      <width>371</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Empty</string>
     </property>
    </widget>
   </widget>
@@ -87,16 +100,16 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionRename"/>
+   <addaction name="actionRemove"/>
    <addaction name="actionCopy"/>
    <addaction name="actionMove"/>
   </widget>
-  <action name="actionRename">
+  <action name="actionRemove">
    <property name="text">
-    <string>Rename</string>
+    <string>Remove</string>
    </property>
    <property name="shortcut">
-    <string>F2</string>
+    <string>Del</string>
    </property>
   </action>
   <action name="actionCopy">

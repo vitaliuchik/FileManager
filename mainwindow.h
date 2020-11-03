@@ -24,19 +24,20 @@ private:
 
     void init();
 
-    void generateFilePanel(QListWidget *, QString);
+    void generateFilePanel1(QListWidget *, QString);
+    void generateFilePanel2(QListWidget *, QString);
 
     QVector<QDir> m_currDirVector = {QDir("/"), QDir("/")};
     QVector<QFileInfoList> m_filesVector = {QFileInfoList(), QFileInfoList()};
     QListWidget *m_activeList = new QListWidget();
     QListWidget *m_passiveList = new QListWidget();
-    int m_activeInd = 0;
-    int m_passiveInd = 1;
-
-    void setActiveList(QListWidget *);
-    void setPassiveList(QListWidget *);
 
 private slots:
-    void processItem(QListWidgetItem *);
+    void processItem1(QListWidgetItem *);
+    void processItem2(QListWidgetItem *);
+
+    void copyItem();
+    void moveItem();
+    void removeItem();
 };
 #endif // MAINWINDOW_H
