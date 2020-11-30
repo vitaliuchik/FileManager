@@ -7,6 +7,8 @@
 #include <QDateTime>
 #include <QVector>
 
+#include "listdecorator.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -24,20 +26,28 @@ private:
 
     void init();
 
+    ListDecorator *getActiveList();
+
+    void generateFilePanel(ListDecorator *);
+
+    QVector<ListDecorator *> m_listWidgetCollection;
+
+
     void generateFilePanel1(QListWidget *, QString);
-    void generateFilePanel2(QListWidget *, QString);
+        void generateFilePanel2(QListWidget *, QString);
 
-    QVector<QDir> m_currDirVector = {QDir("/"), QDir("/")};
-    QVector<QFileInfoList> m_filesVector = {QFileInfoList(), QFileInfoList()};
-    QListWidget *m_activeList = new QListWidget();
-    QListWidget *m_passiveList = new QListWidget();
+        QVector<QDir> m_currDirVector = {QDir("/"), QDir("/")};
+        QVector<QFileInfoList> m_filesVector = {QFileInfoList(), QFileInfoList()};
+        QListWidget *m_activeList = new QListWidget();
+        QListWidget *m_passiveList = new QListWidget();
 
-private slots:
-    void processItem1(QListWidgetItem *);
-    void processItem2(QListWidgetItem *);
+    private slots:
+        void processItem1(QListWidgetItem *);
+        void processItem2(QListWidgetItem *);
 
-    void copyItem();
-    void moveItem();
-    void removeItem();
+        void copyItem();
+        void moveItem();
+        void removeItem();
+
 };
 #endif // MAINWINDOW_H

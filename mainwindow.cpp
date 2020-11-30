@@ -12,8 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    m_activeList = ui->listWidget1;
-    m_passiveList = ui->listWidget2;
+    m_listWidgetCollection = {
+            new ListDecorator(ui->listWidget1, "/", true), new ListDecorator(ui->listWidget2, "/", false)};
 
     init();
 }
@@ -24,13 +24,23 @@ MainWindow::~MainWindow()
 }
 
 
+//void MainWindow::init() {
+
+//}
+
+//ListDecorator *MainWindow::getActiveList() {
+//    return m_listWidgetCollection[0]->isActive ? m_listWidgetCollection[0] : m_listWidgetCollection[1];
+//}
+
+
 void MainWindow::init() {
+
+    generateFilePanel1(m_activeList, "/");
+    generateFilePanel2(m_passiveList, "/");
+
     ui->menuFile->addAction(ui->actionRemove);
     ui->menuFile->addAction(ui->actionCopy);
     ui->menuFile->addAction(ui->actionMove);
-
-    generateFilePanel1(m_activeList, "/home/papka");
-    generateFilePanel2(m_passiveList, "/home/papka/Downloads");
 
     // enter and double click
     connect(m_activeList, &QListWidget::itemActivated, this, &MainWindow::processItem1);
@@ -180,5 +190,6 @@ void MainWindow::generateFilePanel2(QListWidget *listPanel, QString pathString) 
     pathString.replace(QString("../"), QString(""));
     ui->label2->setText(pathString);
 }
+
 
 
