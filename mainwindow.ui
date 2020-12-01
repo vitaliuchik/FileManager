@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Pocket Commander</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label1">
@@ -103,6 +103,9 @@
    <addaction name="actionRemove"/>
    <addaction name="actionCopy"/>
    <addaction name="actionMove"/>
+   <addaction name="actionRename"/>
+   <addaction name="actionNew_Directory"/>
+   <addaction name="actionSearch"/>
   </widget>
   <action name="actionRemove">
    <property name="text">
@@ -126,6 +129,32 @@
    </property>
    <property name="shortcut">
     <string>F6</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="actionNew_Directory">
+   <property name="text">
+    <string>New Directory</string>
+   </property>
+  </action>
+  <action name="actionNew_File">
+   <property name="text">
+    <string>New File</string>
+   </property>
+  </action>
+  <action name="actionSearch">
+   <property name="text">
+    <string>Search</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>

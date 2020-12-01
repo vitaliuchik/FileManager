@@ -6,8 +6,8 @@
 #include <QListWidget>
 #include <QDateTime>
 #include <QVector>
-
-#include "listdecorator.h"
+#include <QMessageBox>
+#include <QInputDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,28 +26,29 @@ private:
 
     void init();
 
-    ListDecorator *getActiveList();
-
-    void generateFilePanel(ListDecorator *);
-
-    QVector<ListDecorator *> m_listWidgetCollection;
-
-
     void generateFilePanel1(QListWidget *, QString);
-        void generateFilePanel2(QListWidget *, QString);
+    void generateFilePanel2(QListWidget *, QString);
 
-        QVector<QDir> m_currDirVector = {QDir("/"), QDir("/")};
-        QVector<QFileInfoList> m_filesVector = {QFileInfoList(), QFileInfoList()};
-        QListWidget *m_activeList = new QListWidget();
-        QListWidget *m_passiveList = new QListWidget();
+    void showException(QString);
 
-    private slots:
-        void processItem1(QListWidgetItem *);
-        void processItem2(QListWidgetItem *);
+    bool copyRecursively(QString, QString);
+    void searchRecursively(const QString &path, const QString &pattern, QVector<QString> *result);
 
-        void copyItem();
-        void moveItem();
-        void removeItem();
+    QVector<QDir> m_currDirVector = {QDir("/"), QDir("/")};
+    QVector<QFileInfoList> m_filesVector = {QFileInfoList(), QFileInfoList()};
+    QListWidget *m_activeList = new QListWidget();
+    QListWidget *m_passiveList = new QListWidget();
 
+private slots:
+    void processItem1(QListWidgetItem *);
+    void processItem2(QListWidgetItem *);
+
+    void copyItem();
+    void moveItem();
+    void removeItem();
+    void renameItem();
+    void makeDir();
+    void makeFile();
+    void searchItem();
 };
 #endif // MAINWINDOW_H
